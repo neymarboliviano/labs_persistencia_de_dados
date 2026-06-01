@@ -1,1 +1,51 @@
+const sqlite3 = require("sqlite3").verbose();
 
+/* os dados podem ficar salvos em um arquivo para serem
+  usados depois.
+*/
+
+// Cria ou abre o arquivo do banco de dados
+const db = new sqlite3.Database("banco.db");
+
+// Executa os comandos em sequência
+db.serialize(() => {
+
+  // Cria a tabela de produtos
+  db.run(`
+    CREATE TABLE IF NOT EXISTS produtos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL
+    )
+  `);
+
+  // Adiciona alguns produtos para teste
+  db.run("INSERT INTO produtos (nome) VALUES ('Mouse')");
+  db.run("INSERT INTO produtos (nome) VALUES ('Teclado')");
+  db.run("INSERT INTO produtos (nome) VALUES ('Monitor')");
+
+  // Mostra todos os produtos cadastrados
+  db.all("SELECT * FROM produtos", [], (erro, rows) => {
+    if (erro) {
+      console.log("Erro ao consultar os produtos.");
+      return;
+    }
+
+    console.log("Produtos cadastrados:");
+    console.table(rows);
+  });
+});
+
+/*
+  o sqlite cria um banco de dados em um arquivo.
+
+  a tabela produtos possui um id e um nome.
+
+  o comando INSERT adiciona dados na tabela.
+
+  o comando SELECT consulta os dados salvos.
+*/
+
+// fecha a conexão com o banco
+db.close(() => {
+  console.log("Banco fechado.");
+});
