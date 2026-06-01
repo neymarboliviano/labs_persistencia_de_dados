@@ -1,1 +1,31 @@
+const express = require("express");
 
+const app = express();
+
+// aqui os produtos ficam guardados.
+let produtos = [];
+
+// rota para adicionar um produto
+app.get("/adicionar/:nome", (req, res) => {
+  produtos.push(req.params.nome);
+
+  res.send("Produto adicionado!");
+});
+
+// rota para listar os produtos
+app.get("/produtos", (req, res) => {
+  res.json(produtos);
+});
+
+/*
+  Os produtos ficam salvos dentro da variável "produtos".
+  Isso funciona enquanto o servidor está rodando.
+
+  Quando eu fecho o servidor e inicio novamente,
+  todos os dados somem porque eles estavam apenas
+  na memória do computador.
+*/
+
+app.listen(3000, () => {
+  console.log("Servidor rodando na porta 3000");
+});
