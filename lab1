@@ -2,28 +2,43 @@ const express = require("express");
 
 const app = express();
 
-// aqui os produtos ficam guardados.
+// aqui os produtos ficam guardados apenas na memória.
 let produtos = [];
 
 // rota para adicionar um produto
 app.get("/adicionar/:nome", (req, res) => {
   produtos.push(req.params.nome);
 
-  res.send("Produto adicionado!");
+  res.send("Produto adicionado com sucesso!");
 });
 
-// rota para listar os produtos
+// rota para listar todos os produtos cadastrados
 app.get("/produtos", (req, res) => {
   res.json(produtos);
 });
 
-/*
-  Os produtos ficam salvos dentro da variável "produtos".
-  Isso funciona enquanto o servidor está rodando.
+// rota para buscar um produto específico pelo nome
+app.get("/buscar/:nome", (req, res) => {
+  const nome = req.params.nome;
 
-  Quando eu fecho o servidor e inicio novamente,
-  todos os dados somem porque eles estavam apenas
-  na memória do computador.
+  const produtoEncontrado = produtos.find(
+    produto => produto.toLowerCase() === nome.toLowerCase()
+  );
+
+  if (produtoEncontrado) {
+    res.send(`Produto encontrado: ${produtoEncontrado}`);
+  } else {
+    res.send("Produto não encontrado.");
+  }
+});
+
+/*
+  os produtos ficam salvos apenas na memória RAM.
+
+  É possível adicionar, listar e buscar produtos
+
+  quando o servidor é reiniciado, todos os dados
+  são perdidos porque não existe um banco de dados.
 */
 
 app.listen(3000, () => {
