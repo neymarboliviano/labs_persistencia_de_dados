@@ -1,3 +1,17 @@
+const sqlite3 = require("sqlite3").verbose();
+
+/*
+  Este arquivo faz a conexão entre o
+  Node.js e o banco de dados SQLite.
+*/
+
+const db = new sqlite3.Database("banco.db");
+
+module.exports = db;
+
+
+
+
 const express = require("express");
 const db = require("./database");
 
@@ -57,7 +71,7 @@ app.get("/produto/:id", (req, res) => {
 });
 
 /*
-  O Node.js recebe as requisições do usuário
+  o node recebe as ações do usuário
   e envia comandos para o banco de dados.
 
   O INSERT adiciona novos produtos.
